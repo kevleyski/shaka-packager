@@ -106,6 +106,11 @@ void MpdNotifyMuxerListener::OnMediaStart(
   }
 }
 
+// Record the availability time offset for LL-DASH manifests.
+void MpdNotifyMuxerListener::OnAvailabilityOffsetReady() {
+  mpd_notifier_->NotifyAvailabilityTimeOffset(notification_id_.value());
+}
+
 // Record the sample duration in the media info for VOD so that OnMediaEnd, all
 // the information is in the media info.
 void MpdNotifyMuxerListener::OnSampleDurationReady(
@@ -129,6 +134,11 @@ void MpdNotifyMuxerListener::OnSampleDurationReady(
   media_info_->mutable_video_info()->set_frame_duration(sample_duration);
 }
 
+// Record the segment duration for LL-DASH manifests.
+void MpdNotifyMuxerListener::OnSegmentDurationReady() {
+  mpd_notifier_->NotifySegmentDuration(notification_id_.value());
+}
+
 void MpdNotifyMuxerListener::OnMediaEnd(const MediaRanges& media_ranges,
                                         float duration_seconds) {
   if (mpd_notifier_->dash_profile() == DashProfile::kLive) {
@@ -142,6 +152,7 @@ void MpdNotifyMuxerListener::OnMediaEnd(const MediaRanges& media_ranges,
 
   DCHECK(media_info_);
   if (!internal::SetVodInformation(media_ranges, duration_seconds,
+                                   mpd_notifier_->use_segment_list(),
                                    media_info_.get())) {
     LOG(ERROR) << "Failed to generate VOD information from input.";
     return;

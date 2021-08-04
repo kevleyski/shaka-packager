@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Copyright 2014 Google Inc. All Rights Reserved.
 #
@@ -131,22 +131,18 @@ class DiffFilesPolicy(object):
       actual_file = os.path.join(out_dir, diff_file)
       expected_file = os.path.join(gold_dir, diff_file)
 
-      output, error = self._GitDiff(expected_file, actual_file)
+      output = self._GitDiff(expected_file, actual_file)
 
       # If this is an MP4 file, get a better looking diff.
-      if ((output or error) and
+      if (output and
           os.path.splitext(actual_file)[1] in {'.mp4', '.m4s'}):
-        new_output, new_error = self._Mp4Diff(
+        new_output = self._Mp4Diff(
             out_dir, expected_file, actual_file)
 
         output = new_output or output
-        error = new_error or error
 
       if output:
         failure_messages += [output.decode('utf8')]
-
-      if error:
-        failure_messages += [error.decode('utf8')]
 
     if self._exact:
       for diff_file in self._allowed_diff_files:
@@ -166,8 +162,7 @@ class DiffFilesPolicy(object):
         file_a,
         file_b
     ]
-    p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-    return p.communicate()
+    return subprocess.check_output(cmd)
 
   def _Mp4Diff(self, out_dir, file_a, file_b):
     dump_a = os.path.join(out_dir, os.path.basename(file_a) + '.dump.expected')
@@ -262,7 +257,7 @@ def GetSegmentedExtension(base_extension):
 class PackagerAppTest(unittest.TestCase):
 
   def setUp(self):
-    super(PackagerAppTest, self).setUp()
+    super().setUp()
     self.packager = packager_app.PackagerApp()
     self.tmp_dir = tempfile.mkdtemp()
     self.test_data_dir = os.path.join(test_env.SRC_DIR, 'packager', 'media',
@@ -294,7 +289,7 @@ class PackagerAppTest(unittest.TestCase):
   def tearDown(self):
     if test_env.options.remove_temp_files_after_test:
       shutil.rmtree(self.tmp_dir)
-    super(PackagerAppTest, self).tearDown()
+    super().tearDown()
 
   def _GetStream(self,
                  descriptor,
@@ -478,7 +473,8 @@ class PackagerAppTest(unittest.TestCase):
                 default_language=None,
                 segment_duration=1.0,
                 use_fake_clock=True,
-                allow_codec_switching=False):
+                allow_codec_switching=False,
+                dash_force_segment_list=False):
     flags = ['--single_threaded']
 
     if not strip_parameter_set_nalus:
@@ -567,6 +563,10 @@ class PackagerAppTest(unittest.TestCase):
 
     if default_language:
       flags += ['--default_language', default_language]
+
+    if dash_force_segment_list:
+      flags += ['--dash_force_segment_list']
+      flags += ['--generate_sidx_in_media_segments=false']
 
     flags.append('--segment_duration={0}'.format(segment_duration))
 
@@ -1518,13 +1518,26 @@ class PackagerFunctionalTest(PackagerAppTest):
 
   def testEncryptionAndOutputMediaInfoAndMpdFromMediaInfo(self):
     self.assertPackageSuccess(
-        # The order is not determinstic if there are more than one
+        # The order is not deterministic if there are more than one
         # AdaptationSets, so only one is included here.
         self._GetStreams(['video']),
         self._GetFlags(encryption=True, output_media_info=True))
     self.assertMpdGeneratorSuccess()
     self._CheckTestResults(
         'encryption-and-output-media-info-and-mpd-from-media-info')
+
+  def testEncryptionAndOutputMediaInfoAndMpdFromMediaInfoSegmentList(self):
+    self.assertPackageSuccess(
+        # The order is not deterministic if there are more than one
+        # AdaptationSets, so only one is included here.
+        self._GetStreams(['audio']),
+        self._GetFlags(
+            encryption=True,
+            output_media_info=True,
+            dash_force_segment_list=True,
+            output_dash=True))
+    self._CheckTestResults(
+        'encryption-and-output-media-info-and-mpd-from-media-info-segmentlist')
 
   def testHlsSingleSegmentMp4Encrypted(self):
     self.assertPackageSuccess(

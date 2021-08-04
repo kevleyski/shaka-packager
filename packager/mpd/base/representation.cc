@@ -208,6 +208,13 @@ void Representation::SetSampleDuration(uint32_t frame_duration) {
   }
 }
 
+void Representation::SetSegmentDuration() {
+  int64_t sd = mpd_options_.mpd_params.target_segment_duration * media_info_.reference_time_scale();
+  if (sd <= 0)
+    return;
+  media_info_.set_segment_duration(sd);
+}
+
 const MediaInfo& Representation::GetMediaInfo() const {
   return media_info_;
 }
@@ -265,14 +272,17 @@ base::Optional<xml::XmlNode> Representation::GetXml() {
   }
 
   if (HasVODOnlyFields(media_info_) &&
-      !representation.AddVODOnlyInfo(media_info_)) {
+      !representation.AddVODOnlyInfo(
+          media_info_, mpd_options_.mpd_params.use_segment_list,
+          mpd_options_.mpd_params.target_segment_duration)) {
     LOG(ERROR) << "Failed to add VOD info.";
     return base::nullopt;
   }
 
   if (HasLiveOnlyFields(media_info_) &&
       !representation.AddLiveOnlyInfo(media_info_, segment_infos_,
-                                      start_number_)) {
+                                      start_number_, 
+                                      mpd_options_.mpd_params.is_low_latency_dash)) {
     LOG(ERROR) << "Failed to add Live info.";
     return base::nullopt;
   }
@@ -293,6 +303,15 @@ void Representation::SetPresentationTimeOffset(
   if (pto <= 0)
     return;
   media_info_.set_presentation_time_offset(pto);
+}
+
+void Representation::SetAvailabilityTimeOffset() {
+  // Adjust the frame duration to units of seconds to match target segment duration.
+  const float frame_duration_sec = (float)frame_duration_ / (float)media_info_.reference_time_scale();
+  const float ato = mpd_options_.mpd_params.target_segment_duration - frame_duration_sec;
+  if (ato <= 0)
+    return;
+  media_info_.set_availability_time_offset(ato);
 }
 
 bool Representation::GetStartAndEndTimestamps(

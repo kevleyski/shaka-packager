@@ -22,6 +22,7 @@
 #include "packager/media/codecs/es_descriptor.h"
 #include "packager/media/event/muxer_listener.h"
 #include "packager/media/formats/mp4/box_definitions.h"
+#include "packager/media/formats/mp4/low_latency_segment_segmenter.h"
 #include "packager/media/formats/mp4/multi_segment_segmenter.h"
 #include "packager/media/formats/mp4/single_segment_segmenter.h"
 #include "packager/media/formats/ttml/ttml_generator.h"
@@ -90,6 +91,10 @@ FourCC CodecToFourCC(Codec codec, H26xStreamFormat h26x_stream_format) {
       return FOURCC_fLaC;
     case kCodecOpus:
       return FOURCC_Opus;
+    case kCodecMha1:
+      return FOURCC_mha1;
+    case kCodecMhm1:
+      return FOURCC_mhm1;
     default:
       return FOURCC_NULL;
   }
@@ -294,6 +299,9 @@ Status MP4Muxer::DelayInitializeMuxer() {
   if (options().segment_template.empty()) {
     segmenter_.reset(new SingleSegmentSegmenter(options(), std::move(ftyp),
                                                 std::move(moov)));
+  } else if (options().mp4_params.is_low_latency_dash) {
+    segmenter_.reset(
+        new LowLatencySegmentSegmenter(options(), std::move(ftyp), std::move(moov)));
   } else {
     segmenter_.reset(
         new MultiSegmentSegmenter(options(), std::move(ftyp), std::move(moov)));
@@ -512,6 +520,10 @@ bool MP4Muxer::GenerateAudioTrak(const AudioStreamInfo* audio_info,
     }
     case kCodecOpus:
       audio.dops.opus_identification_header = audio_info->codec_config();
+      break;
+    case kCodecMha1:
+    case kCodecMhm1:
+      audio.mhac.data = audio_info->codec_config();
       break;
     default:
       NOTIMPLEMENTED() << " Unsupported audio codec " << audio_info->codec();
