@@ -604,7 +604,15 @@ bool MP4MediaParser::ParseMoov(BoxReader* reader) {
             LOG(ERROR) << "Failed to parse av1c.";
             return false;
           }
-          codec_string = av1_config.GetCodecString();
+          // Generate the full codec string if the colr atom is present.
+          if (entry.colr.color_parameter_type != FOURCC_NULL) {
+            codec_string = av1_config.GetCodecString(
+                entry.colr.color_primaries, entry.colr.transfer_characteristics,
+                entry.colr.matrix_coefficients,
+                entry.colr.video_full_range_flag);
+          } else {
+            codec_string = av1_config.GetCodecString();
+          }
           break;
         }
         case FOURCC_avc1:
@@ -718,6 +726,8 @@ bool MP4MediaParser::ParseMoov(BoxReader* reader) {
           0,  // trick_play_factor
           nalu_length_size, track->media.header.language.code, is_encrypted));
       video_stream_info->set_extra_config(entry.ExtraCodecConfigsAsVector());
+      video_stream_info->set_colr_data((entry.colr.raw_box).data(),
+                                       (entry.colr.raw_box).size());
 
       // Set pssh raw data if it has.
       if (moov_->pssh.size() > 0) {

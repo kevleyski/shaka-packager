@@ -1462,6 +1462,43 @@ size_t CodecConfiguration::ComputeSizeInternal() {
   return HeaderSize() + (box_type == FOURCC_vpcC ? 4 : 0) + data.size();
 }
 
+ColorParameters::ColorParameters() = default;
+ColorParameters::~ColorParameters() = default;
+
+FourCC ColorParameters::BoxType() const {
+  return FOURCC_colr;
+}
+
+bool ColorParameters::ReadWriteInternal(BoxBuffer* buffer) {
+  if (buffer->Reading()) {
+    BoxReader* reader = buffer->reader();
+    DCHECK(reader);
+
+    // Parse and store the raw box for colr atom preservation in the output mp4.
+    raw_box.assign(reader->data(), reader->data() + reader->size());
+
+    // Parse individual parameters for full codec string formation.
+    RCHECK(reader->ReadFourCC(&color_parameter_type) &&
+           reader->Read2(&color_primaries) &&
+           reader->Read2(&transfer_characteristics) &&
+           reader->Read2(&matrix_coefficients));
+    // Type nclc does not contain video_full_range_flag data, and thus, it has 1
+    // less byte than nclx. Only extract video_full_range_flag if of type nclx.
+    if (color_parameter_type == FOURCC_nclx) {
+      RCHECK(reader->Read1(&video_full_range_flag));
+    }
+  } else {
+    // When writing, only need to write the raw_box.
+    DCHECK(!raw_box.empty());
+    buffer->writer()->AppendVector(raw_box);
+  }
+  return true;
+}
+
+size_t ColorParameters::ComputeSizeInternal() {
+  return raw_box.size();
+}
+
 PixelAspectRatio::PixelAspectRatio() = default;
 PixelAspectRatio::~PixelAspectRatio() = default;
 
@@ -1597,6 +1634,7 @@ bool VideoSampleEntry::ReadWriteInternal(BoxBuffer* buffer) {
       RCHECK(buffer->ReadWriteChild(&extra_codec_config));
   }
 
+  RCHECK(buffer->TryReadWriteChild(&colr));
   RCHECK(buffer->TryReadWriteChild(&pixel_aspect));
 
   // Somehow Edge does not support having sinf box before codec_configuration,
@@ -1618,9 +1656,10 @@ size_t VideoSampleEntry::ComputeSizeInternal() {
   size_t size = HeaderSize() + sizeof(data_reference_index) + sizeof(width) +
                 sizeof(height) + sizeof(kVideoResolution) * 2 +
                 sizeof(kVideoFrameCount) + sizeof(kVideoDepth) +
-                pixel_aspect.ComputeSize() + sinf.ComputeSize() +
-                codec_configuration.ComputeSize() + kCompressorNameSize + 6 +
-                4 + 16 + 2;  // 6 + 4 bytes reserved, 16 + 2 bytes predefined.
+                colr.ComputeSize() + pixel_aspect.ComputeSize() +
+                sinf.ComputeSize() + codec_configuration.ComputeSize() +
+                kCompressorNameSize + 6 + 4 + 16 +
+                2;  // 6 + 4 bytes reserved, 16 + 2 bytes predefined.
   for (CodecConfiguration& codec_config : extra_codec_configs)
     size += codec_config.ComputeSize();
   return size;
