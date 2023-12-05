@@ -1,16 +1,17 @@
-// Copyright 2017 Google Inc. All rights reserved.
+// Copyright 2017 Google LLC. All rights reserved.
 //
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
 
-#include "packager/media/formats/webvtt/webvtt_parser.h"
+#include <packager/media/formats/webvtt/webvtt_parser.h>
+
+#include <functional>
 
 #include <gtest/gtest.h>
 
-#include "packager/base/bind.h"
-#include "packager/media/base/stream_info.h"
-#include "packager/media/base/text_sample.h"
+#include <packager/media/base/stream_info.h>
+#include <packager/media/base/text_sample.h>
 
 namespace shaka {
 namespace media {
@@ -49,9 +50,11 @@ class WebVttParserTest : public testing::Test {
   void SetUpAndInitialize() {
     parser_ = std::make_shared<WebVttParser>();
     parser_->Init(
-        base::Bind(&WebVttParserTest::InitCB, base::Unretained(this)),
-        base::Bind(&WebVttParserTest::NewMediaSampleCB, base::Unretained(this)),
-        base::Bind(&WebVttParserTest::NewTextSampleCB, base::Unretained(this)),
+        std::bind(&WebVttParserTest::InitCB, this, std::placeholders::_1),
+        std::bind(&WebVttParserTest::NewMediaSampleCB, this,
+                  std::placeholders::_1, std::placeholders::_2),
+        std::bind(&WebVttParserTest::NewTextSampleCB, this,
+                  std::placeholders::_1, std::placeholders::_2),
         nullptr);
   }
 
@@ -184,6 +187,36 @@ TEST_F(WebVttParserTest, ParseOneCue) {
       "\n"
       "00:01:00.000 --> 01:00:00.000\n"
       "subtitle\n";
+
+  ASSERT_NO_FATAL_FAILURE(SetUpAndInitialize());
+
+  ASSERT_TRUE(parser_->Parse(text, sizeof(text) - 1));
+  ASSERT_TRUE(parser_->Flush());
+
+  ASSERT_EQ(streams_.size(), 1u);
+  ASSERT_EQ(samples_.size(), 1u);
+  EXPECT_EQ(samples_[0]->id(), kNoId);
+  EXPECT_EQ(samples_[0]->start_time(), 60000u);
+  EXPECT_EQ(samples_[0]->duration(), 3540000u);
+  ExpectPlainCueWithBody(samples_[0]->body(), "subtitle");
+
+  // No settings
+  const auto& settings = samples_[0]->settings();
+  EXPECT_FALSE(settings.line);
+  EXPECT_FALSE(settings.position);
+  EXPECT_FALSE(settings.width);
+  EXPECT_FALSE(settings.height);
+  EXPECT_EQ(settings.region, "");
+  EXPECT_EQ(settings.writing_direction, WritingDirection::kHorizontal);
+  EXPECT_EQ(settings.text_alignment, TextAlignment::kCenter);
+}
+
+TEST_F(WebVttParserTest, ParseOneCueWithoutNewLine) {
+  const uint8_t text[] =
+      "WEBVTT\n"
+      "\n"
+      "00:01:00.000 --> 01:00:00.000\n"
+      "subtitle";
 
   ASSERT_NO_FATAL_FAILURE(SetUpAndInitialize());
 

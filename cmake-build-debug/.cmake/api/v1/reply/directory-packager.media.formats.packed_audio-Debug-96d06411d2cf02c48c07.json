@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "packager/media/formats/packed_audio",
+		"source" : "packager/media/formats/packed_audio"
+	}
+}

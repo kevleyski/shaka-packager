@@ -1,0 +1,120 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"packager/third_party/curl/source/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1553,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1563,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1567,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1587,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1594,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"cmake-build-debug/packager/third_party/curl/source/curl-config"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "lib/pkgconfig",
+			"paths" : 
+			[
+				"cmake-build-debug/packager/third_party/curl/source/libcurl.pc"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"packager/third_party/curl/source/include/curl"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/CURL",
+			"exportName" : "CURLTargets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "libcurl::@84938fd02b3b08dd97d1",
+					"index" : 111
+				},
+				{
+					"id" : "curl::@742b3f3fe14f8e447a71",
+					"index" : 86
+				}
+			],
+			"paths" : 
+			[
+				"packager/third_party/curl/source/CMakeFiles/Export/8e83d16133499b505bf3986f4f209a65/CURLTargets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/CURL",
+			"paths" : 
+			[
+				"cmake-build-debug/packager/third_party/curl/source/generated/CURLConfigVersion.cmake",
+				"cmake-build-debug/packager/third_party/curl/source/generated/CURLConfig.cmake"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "packager/third_party/curl/source",
+		"source" : "packager/third_party/curl/source"
+	}
+}

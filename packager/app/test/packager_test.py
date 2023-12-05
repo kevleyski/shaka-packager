@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-# Copyright 2014 Google Inc. All Rights Reserved.
+# Copyright 2014 Google LLC. All Rights Reserved.
 #
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file or at
@@ -709,7 +709,7 @@ class PackagerFunctionalTest(PackagerAppTest):
         self._GetStream(
             'audio',
             dash_accessibilities='urn:tva:metadata:cs:AudioPurposeCS:2007=1',
-            dash_roles='alternate'),
+            dash_roles='description'),
         self._GetStream('video'),
     ]
 

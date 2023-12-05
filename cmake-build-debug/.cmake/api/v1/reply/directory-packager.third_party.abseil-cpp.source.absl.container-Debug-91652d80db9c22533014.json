@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "packager/third_party/abseil-cpp/source/absl/container",
+		"source" : "packager/third_party/abseil-cpp/source/absl/container"
+	}
+}

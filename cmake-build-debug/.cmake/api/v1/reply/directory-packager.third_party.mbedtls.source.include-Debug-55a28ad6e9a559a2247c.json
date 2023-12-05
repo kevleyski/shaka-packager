@@ -1,0 +1,136 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"packager/third_party/mbedtls/source/include/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 8,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 12,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "include/mbedtls",
+			"paths" : 
+			[
+				"packager/third_party/mbedtls/source/include/mbedtls/aes.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/aria.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/asn1.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/asn1write.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/base64.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/bignum.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/build_info.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/camellia.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ccm.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/chacha20.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/chachapoly.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/check_config.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/cipher.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/cmac.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/compat-2.x.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/config_psa.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/constant_time.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ctr_drbg.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/debug.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/des.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/dhm.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ecdh.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ecdsa.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ecjpake.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ecp.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/entropy.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/error.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/gcm.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/hkdf.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/hmac_drbg.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/mbedtls_config.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/md.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/md5.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/memory_buffer_alloc.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/net_sockets.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/nist_kw.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/oid.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/pem.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/pk.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/pkcs12.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/pkcs5.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/platform.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/platform_time.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/platform_util.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/poly1305.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/private_access.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/psa_util.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ripemd160.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/rsa.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/sha1.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/sha256.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/sha512.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ssl.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ssl_cache.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ssl_ciphersuites.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ssl_cookie.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/ssl_ticket.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/threading.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/timing.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/version.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/x509.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/x509_crl.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/x509_crt.h",
+				"packager/third_party/mbedtls/source/include/mbedtls/x509_csr.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "include/psa",
+			"paths" : 
+			[
+				"packager/third_party/mbedtls/source/include/psa/crypto.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_builtin_composites.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_builtin_primitives.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_compat.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_config.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_driver_common.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_driver_contexts_composites.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_driver_contexts_primitives.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_extra.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_platform.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_se_driver.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_sizes.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_struct.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_types.h",
+				"packager/third_party/mbedtls/source/include/psa/crypto_values.h"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "packager/third_party/mbedtls/source/include",
+		"source" : "packager/third_party/mbedtls/source/include"
+	}
+}

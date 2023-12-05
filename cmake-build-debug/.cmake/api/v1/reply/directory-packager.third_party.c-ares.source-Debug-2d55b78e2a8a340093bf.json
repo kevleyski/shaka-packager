@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "packager/third_party/c-ares/source",
+		"source" : "packager/third_party/c-ares/source"
+	}
+}
