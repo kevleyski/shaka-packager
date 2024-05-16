@@ -15,6 +15,7 @@
 #include <libxml/tree.h>
 
 #include <packager/macros/logging.h>
+#include <packager/media/base/fourccs.h>
 #include <packager/media/base/language_utils.h>
 #include <packager/media/base/protection_system_specific_info.h>
 #include <packager/mpd/base/adaptation_set.h>
@@ -128,6 +129,29 @@ std::string GetCodecs(const MediaInfo& media_info) {
   return "";
 }
 
+std::string GetSupplementalCodecs(const MediaInfo& media_info) {
+  CHECK(OnlyOneTrue(media_info.has_video_info(), media_info.has_audio_info(),
+                    media_info.has_text_info()));
+
+  if (media_info.has_video_info() &&
+      media_info.video_info().has_supplemental_codec()) {
+    return media_info.video_info().supplemental_codec();
+  }
+  return "";
+}
+
+std::string GetSupplementalProfiles(const MediaInfo& media_info) {
+  CHECK(OnlyOneTrue(media_info.has_video_info(), media_info.has_audio_info(),
+                    media_info.has_text_info()));
+
+  if (media_info.has_video_info() &&
+      media_info.video_info().has_compatible_brand()) {
+    return FourCCToString(
+        static_cast<media::FourCC>(media_info.video_info().compatible_brand()));
+  }
+  return "";
+}
+
 std::string GetBaseCodec(const MediaInfo& media_info) {
   std::string codec;
   if (media_info.has_video_info()) {
@@ -160,6 +184,9 @@ std::string GetAdaptationSetKey(const MediaInfo& media_info,
   } else {
     key.append("unknown:");
   }
+
+  if (media_info.has_dash_label())
+    key.append(media_info.dash_label() + ":");
 
   key.append(MediaInfo_ContainerType_Name(media_info.container_type()));
   if (!ignore_codec) {
@@ -203,7 +230,7 @@ std::string GetAdaptationSetKey(const MediaInfo& media_info,
 
 std::string FloatToXmlString(double number) {
   // Keep up to microsecond accuracy but trim trailing 0s
-  std::string formatted = absl::StrFormat("%.6g", number);
+  std::string formatted = absl::StrFormat("%.6f", number);
   size_t decimalPos = formatted.find('.');
   if (decimalPos != std::string::npos) {
     size_t lastNonZeroPos = formatted.find_last_not_of('0');
