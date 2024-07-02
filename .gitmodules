@@ -1,6 +1,9 @@
 [submodule "packager/third_party/googletest/source"]
 	path = packager/third_party/googletest/source
 	url = https://github.com/google/googletest
+[submodule "packager/third_party/abseil-cpp/source"]
+	path = packager/third_party/abseil-cpp/source
+	url = https://github.com/abseil/abseil-cpp
 [submodule "packager/third_party/curl/source"]
 	path = packager/third_party/curl/source
 	url = https://github.com/curl/curl
@@ -22,6 +25,9 @@
 [submodule "packager/third_party/libxml2/source"]
 	path = packager/third_party/libxml2/source
 	url = https://github.com/GNOME/libxml2
+[submodule "packager/third_party/protobuf/source"]
+	path = packager/third_party/protobuf/source
+	url = https://github.com/protocolbuffers/protobuf
 [submodule "packager/third_party/mongoose/source"]
 	path = packager/third_party/mongoose/source
 	url = https://github.com/cesanta/mongoose
