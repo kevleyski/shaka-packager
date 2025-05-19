@@ -291,6 +291,7 @@ class PackagerAppTest(unittest.TestCase):
       shutil.rmtree(self.tmp_dir)
     super().tearDown()
 
+  # pylint: disable=too-many-positional-arguments
   def _GetStream(self,
                  descriptor,
                  language=None,
@@ -457,6 +458,7 @@ class PackagerAppTest(unittest.TestCase):
 
     return out
 
+  # pylint: disable=too-many-positional-arguments
   def _GetFlags(self,
                 strip_parameter_set_nalus=True,
                 encryption=False,
@@ -1104,6 +1106,44 @@ class PackagerFunctionalTest(PackagerAppTest):
         self._GetFlags(output_dash=True, output_hls=True))
     self._CheckTestResults('av1-webm')
 
+  def testMvHevcMp4(self):
+    self.assertPackageSuccess(
+        self._GetStreams(['video'], test_files=['water-mv-hevc.mp4']),
+        self._GetFlags())
+    self._CheckTestResults('mv-hevc-mp4')
+
+  def testIamfWithBaseProfileAndPcm(self):
+    self.assertPackageSuccess(
+        self._GetStreams(['audio'],
+                         output_format='mp4',
+                         test_files=['bear-iamf-base-pcm.mp4']),
+        self._GetFlags(output_dash=True, output_hls=True))
+    self._CheckTestResults('iamf-base-pcm-mp4')
+
+  def testIamfWithBaseProfileAndOpus(self):
+    self.assertPackageSuccess(
+        self._GetStreams(['audio'],
+                         output_format='mp4',
+                         test_files=['bear-iamf-base-opus.mp4']),
+        self._GetFlags(output_dash=True, output_hls=True))
+    self._CheckTestResults('iamf-base-opus-mp4')
+
+  def testIamfWithSimpleProfileAndAacLc(self):
+    self.assertPackageSuccess(
+        self._GetStreams(['audio'],
+                         output_format='mp4',
+                         test_files=['bear-iamf-simple-aac-lc.mp4']),
+        self._GetFlags(output_dash=True, output_hls=True))
+    self._CheckTestResults('iamf-simple-aac-lc-mp4')
+
+  def testIamfWithSimpleProfileAndFlac(self):
+    self.assertPackageSuccess(
+        self._GetStreams(['audio'],
+                         output_format='mp4',
+                         test_files=['bear-iamf-simple-flac.mp4']),
+        self._GetFlags(output_dash=True, output_hls=True))
+    self._CheckTestResults('iamf-simple-flac-mp4')
+
   def testEncryption(self):
     self.assertPackageSuccess(
         self._GetStreams(['audio', 'video']),
@@ -1551,6 +1591,13 @@ class PackagerFunctionalTest(PackagerAppTest):
         self._GetStreams(['video'], test_files=['bear-av1.webm']),
         self._GetFlags(encryption=True, output_dash=True, output_hls=True))
     self._CheckTestResults('av1-webm-with-encryption', verify_decryption=True)
+
+  def testMvHevcMp4WithEncryption(self):
+    self.assertPackageSuccess(
+        self._GetStreams(['video'], test_files=['water-mv-hevc.mp4']),
+        self._GetFlags(encryption=True))
+    self._CheckTestResults('mv-hevc-mp4-with-encryption',
+                           verify_decryption=True)
 
   def testWvmInput(self):
     self.encryption_key = '9248d245390e0a49d483ba9b43fc69c3'
