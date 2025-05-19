@@ -6,8 +6,10 @@
 brew install cmake
 brew install ninja
 
-cmake -B cmake-build-release -G Ninja -DCMAKE_BUILD_TYPE=Release
-cmake --build cmake-build-release --parallel --config Release
+CMAKE=/opt/homebrew/bin/cmake
 
-cmake -B cmake-build-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug
-cmake --build cmake-build-debug --parallel --config Debug
+$CMAKE -B cmake-build-release -G Ninja -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release
+$CMAKE --build cmake-build-release --parallel --config Release
+
+$CMAKE -B cmake-build-debug -G Ninja -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Debug
+$CMAKE --build cmake-build-debug --parallel --config Debug
